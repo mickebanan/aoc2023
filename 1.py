@@ -32,38 +32,30 @@ numbers = {
 }
 reversed_numbers = {''.join(reversed(n)): a for n, a in numbers.items()}
 
-def sliding_window(iterable, n):
-    # sliding_window('ABCDEFG', 4) --> ABCD BCDE CDEF DEFG
-    it = iter(iterable)
-    window = collections.deque(itertools.islice(it, n - 1), maxlen=n)
-    for x in it:
-        window.append(x)
-        yield ''.join(window)
-
 
 def check(input, reverse=False, part_2=False):
-    for chars in sliding_window(input, 5):
-        if chars[0].isnumeric():
-            return chars[0]
+    for i, _ in enumerate(input):
+        if input[i].isnumeric():
+            return input[i]
         if part_2:
             nums = numbers
             if reverse:
                 nums = reversed_numbers
             for number in nums:
-                if chars.startswith(number):
+                if input[i:].startswith(number):
                     return nums[number]
 
 
 # part 1
 s = []
 for line in data:
-    row = [check(line + '    '), check(''.join(reversed('    ' + line)), reverse=True)]
+    row = [check(line), check(''.join(reversed(line)), reverse=True)]
     s.append(''.join(row))
 print(sum(int(a) for a in s))
 
 # part 2
 s = []
 for line in data:
-    row = [check(line + '    ', part_2=True), check(''.join(reversed('    ' + line)), reverse=True, part_2=True)]
+    row = [check(line, part_2=True), check(''.join(reversed(line)), reverse=True, part_2=True)]
     s.append(''.join(row))
 print(sum(int(a) for a in s))
