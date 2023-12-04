@@ -33,11 +33,11 @@ numbers = {
 reversed_numbers = {''.join(reversed(n)): a for n, a in numbers.items()}
 
 
-def check(input, nums=None, part_2=False):
+def check(input, nums=None):
     for i, _ in enumerate(input):
         if input[i].isnumeric():
             return input[i]
-        if part_2:
+        if nums:
             for number in nums:
                 if input[i:].startswith(number):
                     return nums[number]
@@ -53,6 +53,6 @@ print(sum(int(a) for a in s))
 # part 2
 s = []
 for line in data:
-    row = [check(line, part_2=True, nums=numbers), check(''.join(reversed(line)), nums=reversed_numbers, part_2=True)]
+    row = [check(line, nums=numbers), check(''.join(reversed(line)), nums=reversed_numbers)]
     s.append(''.join(row))
 print(sum(int(a) for a in s))
