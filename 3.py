@@ -42,7 +42,6 @@ s1 = s2 = 0
 gears = collections.defaultdict(list)
 for y, row in enumerate(data):
     for m in re.finditer(r'(\d+)', row):
-        # print(m[0], m.span())
         if check_adjacent(y, m.span()[0], m.span()[1] - m.span()[0] - 1):
             s1 += int(m[0])
         if gear := check_adjacent(y, m.span()[0], m.span()[1] - m.span()[0] - 1, gear=True):
