@@ -1,6 +1,8 @@
 import operator
 from functools import reduce
 
+import helpers
+
 data = [
     'Time:      7  15   30',
     'Distance:  9  40  200',
@@ -36,12 +38,19 @@ def get_wins(time, distance):
     return end - start
 
 
-# part 1
-wins = []
-for time, distance in zip(times, distances):
-    wins.append(get_wins(int(time), int(distance)))
-print('part 1:', reduce(operator.mul, wins))
+@helpers.timer
+def p1():
+    wins = []
+    for time, distance in zip(times, distances):
+        wins.append(get_wins(int(time), int(distance)))
+    print('part 1:', reduce(operator.mul, wins))
 
-# part 2
-time, distance = int(''.join(times)), int(''.join(distances))
-print('part 2:', get_wins(time, distance))
+
+@helpers.timer
+def p2():
+    time, distance = int(''.join(times)), int(''.join(distances))
+    print('part 2:', get_wins(time, distance))
+
+
+p1()
+p2()

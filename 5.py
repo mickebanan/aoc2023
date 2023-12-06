@@ -1,3 +1,5 @@
+import helpers
+
 data = [
     'seeds: 79 14 55 13',
     'seed-to-soil map:',
@@ -32,7 +34,7 @@ with open('5.dat') as f:
 seeds = []
 mapping = {}
 mapping_inverse = {}
-m = None
+m = rm = None
 for row in data:
     if not row:
         continue
@@ -52,36 +54,46 @@ for row in data:
             mapping[m][(source, source + length - 1)] = dest
             mapping_inverse[rm][(dest, dest + length - 1)] = source
 
-# part 1
-min_loc = None
-for seed in seeds:
-    a = seed
-    for m in ('seed-to-soil', 'soil-to-fertilizer', 'fertilizer-to-water', 'water-to-light', 'light-to-temperature',
-              'temperature-to-humidity', 'humidity-to-location'):
-        match = next((_m for _m in mapping[m] if _m[0] <= a <= _m[1]), None)
-        if match:
-            match_map = mapping[m][match]
-            a = match_map + a - match[0]
-    min_loc = min(a or min_loc, min_loc or a)
-print('part 1:', min_loc)
 
-# part 2
-# Very slow (10+ min) but gets the right answer by going backwards from potential locations and checking if
-# there's a matching seed.
-seed_intervals = [(seed_start, seed_start + seed_length - 1)
-                  for seed_start, seed_length in zip(seeds[::2], seeds[1::2])]
-found = False
-for a in range(10000000):
-    if found:
-        break
-    initial = a
-    for m in ('location-to-humidity', 'humidity-to-temperature', 'temperature-to-light', 'light-to-water',
-              'water-to-fertilizer', 'fertilizer-to-soil', 'soil-to-seed'):
-        match = next((_m for _m in mapping_inverse[m] if _m[0] <= a <= _m[1]), None)
-        if match:
-            match_map = mapping_inverse[m][match]
-            a = match_map + a - match[0]
-    for start, end in seed_intervals:
-        if start <= a <= end:
-            print(' final match:', initial)
-            found = True
+@helpers.timer
+def p1():
+    # part 1
+    min_loc = None
+    for seed in seeds:
+        a = seed
+        for m in ('seed-to-soil', 'soil-to-fertilizer', 'fertilizer-to-water', 'water-to-light', 'light-to-temperature',
+                  'temperature-to-humidity', 'humidity-to-location'):
+            match = next((_m for _m in mapping[m] if _m[0] <= a <= _m[1]), None)
+            if match:
+                match_map = mapping[m][match]
+                a = match_map + a - match[0]
+        min_loc = min(a or min_loc, min_loc or a)
+    print('part 1:', min_loc)
+
+
+@helpers.timer
+def p2():
+    # part 2
+    # Very slow but calculates the right answer by going backwards from potential locations and checking if
+    # there's a matching seed.
+    seed_intervals = [(seed_start, seed_start + seed_length - 1)
+                      for seed_start, seed_length in zip(seeds[::2], seeds[1::2])]
+    found = False
+    for a in range(100000000):
+        if found:
+            break
+        initial = a
+        for m in ('location-to-humidity', 'humidity-to-temperature', 'temperature-to-light', 'light-to-water',
+                  'water-to-fertilizer', 'fertilizer-to-soil', 'soil-to-seed'):
+            match = next((_m for _m in mapping_inverse[m] if _m[0] <= a <= _m[1]), None)
+            if match:
+                match_map = mapping_inverse[m][match]
+                a = match_map + a - match[0]
+        for start, end in seed_intervals:
+            if start <= a <= end:
+                print(' final match:', initial)
+                found = True
+
+
+p1()
+p2()  # 357 seconds. Not pretty.
