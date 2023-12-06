@@ -16,18 +16,18 @@ distances = data[1].split()[1:]
 
 def get_wins(time, distance):
     w = 0
-    prev = 0
-    descending = False
+    start = end = None
     for bt in range(1, time):
         value = (time - bt) * bt
         if value > distance:
-            w += 1
-            if value < prev:
-                descending = True
-            prev = value
-        if descending and value < distance:
+            start = bt
             break
-    return w
+    for bt in range(time, start, -1):
+        value = (time - bt) * bt
+        if value > distance:
+            end = bt
+            break
+    return end - start + 1
 
 
 # part 1
