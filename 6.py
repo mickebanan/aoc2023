@@ -15,16 +15,14 @@ distances = data[1].split()[1:]
 
 
 def get_wins(time, distance):
-    w = 0
+    # The distances describe a bell curve, so it's enough to just find the winning start and end points.
     start = end = None
     for bt in range(1, time):
-        value = (time - bt) * bt
-        if value > distance:
+        if (time - bt) * bt > distance:
             start = bt
             break
     for bt in range(time, start, -1):
-        value = (time - bt) * bt
-        if value > distance:
+        if (time - bt) * bt > distance:
             end = bt
             break
     return end - start + 1
