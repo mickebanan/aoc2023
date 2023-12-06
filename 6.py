@@ -26,9 +26,7 @@ for time, distance in zip(times, distances):
 print('part 1:', reduce(operator.mul, wins))
 
 # part 2
-time, distance = ''.join(times), ''.join(distances)
-time = int(time)
-distance = int(distance)
+time, distance = int(''.join(times)), int(''.join(distances))
 w = 0
 for bt in range(1, time):
     if (time - bt) * bt > distance:
