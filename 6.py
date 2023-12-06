@@ -15,7 +15,8 @@ distances = data[1].split()[1:]
 
 
 def get_wins(time, distance):
-    # The distances describe a bell curve, so it's enough to just find the winning start and end points.
+    # The computed distances describe a bell curve, so it's enough to just find the winning start and end points.
+    # Everything in between is automatically going to win too.
     # starting point
     lower, upper = 0, time
     while lower < upper:
