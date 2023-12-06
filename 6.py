@@ -36,7 +36,6 @@ def search(time, distance, right=False):
 def get_wins(time, distance):
     # The computed distances describe a bell curve, so it's enough to just find the winning start and end points.
     # Everything in between is automatically going to win too.
-    # starting point
     start = search(time, distance)
     end = search(time, distance, right=True)
     return end - start
