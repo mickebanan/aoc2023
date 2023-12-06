@@ -15,7 +15,7 @@ distances = data[1].split()[1:]
 
 
 def search(time, distance):
-    # Binary search from the left (or from the right if right=True)
+    # Binary search from the left
     lower, upper = 0, time
     while lower < upper:
         mid = (lower + upper) // 2
