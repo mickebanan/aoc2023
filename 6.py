@@ -13,22 +13,21 @@ data = [
 times = data[0].split()[1:]
 distances = data[1].split()[1:]
 
-# part 1
-wins = []
-for time, distance in zip(times, distances):
-    time = int(time)
-    distance = int(distance)
+
+def get_wins(time, distance):
     w = 0
     for bt in range(1, time):
         if (time - bt) * bt > distance:
             w += 1
-    wins.append(w)
+    return w
+
+
+# part 1
+wins = []
+for time, distance in zip(times, distances):
+    wins.append(get_wins(int(time), int(distance)))
 print('part 1:', reduce(operator.mul, wins))
 
 # part 2
 time, distance = int(''.join(times)), int(''.join(distances))
-w = 0
-for bt in range(1, time):
-    if (time - bt) * bt > distance:
-        w += 1
-print('part 2:', w)
+print('part 2:', get_wins(time, distance))
