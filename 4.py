@@ -1,3 +1,4 @@
+import collections
 import re
 
 data = [
@@ -11,34 +12,27 @@ data = [
 with open('4.dat') as f:
     data = [line.strip() for line in f.readlines()]
 
-# part 1
-s = 0
-for row in data:
-    m = re.match(r'Card\s+(\d+): ([\d ]+) \| ([\d ]+)', row)
-    card, winning, hand = m.groups()
-    winning = {w for w in winning.split()}
-    hand = {h for h in hand.split()}
-    points = 0
-    if matches := len(hand & winning):
-        points = 1
-        for i in range(1, matches):
-            points *= 2
-    s += points
-print('part 1:', s)
 
-# part 2
-copies = {c: 0 for c in range(1, len(data) + 1)}
-for row in data:
-    m = re.match(r'Card\s+(\d+): ([\d ]+) \| ([\d ]+)', row)
-    card, winning, hand = m.groups()
-    card = int(card)
-    winning = {w for w in winning.split()}
-    hand = {h for h in hand.split()}
-    matches = len(hand & winning)
-    copies[card] += 1
-    c = copies[card]
-    for next_card in range(card + 1, card + matches + 1):
-        if next_card not in copies:
-            break
-        copies[next_card] += c
-print('part 2:', sum(copies.values()))
+def work():
+    s = 0
+    copies = collections.defaultdict(int)
+    for row in data:
+        m = re.match(r'Card\s+(\d+): ([\d ]+) \| ([\d ]+)', row)
+        card, winning, hand = m.groups()
+        card = int(card)
+        winning = {w for w in winning.split()}
+        hand = {h for h in hand.split()}
+        matches = len(hand & winning)
+        points = 0.5
+        copies[card] += 1
+        if matches:
+            for next_card in range(card + 1, card + matches + 1):
+                points *= 2
+                copies[next_card] += copies[card]
+            s += points
+    return int(s), sum(copies.values())
+
+
+s1, s2 = work()
+print('part 1:', s1)
+print('part 2:', s2)
