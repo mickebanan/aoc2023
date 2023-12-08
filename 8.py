@@ -36,6 +36,7 @@ data = [
 ]
 with open('8.dat') as f:
     data = [row.strip() for row in f.readlines()]
+instructions = data[0]
 moves = {}
 for row in data[2:]:
     m = re.match(r'(\w+) = \((\w+), (\w+)\)', row)
@@ -61,28 +62,27 @@ def get_next(where, direction):
 
 def p1():
     start = 'AAA'
-    steps = work(start, itertools.cycle(data[0]))
+    steps = work(start, itertools.cycle(instructions))
     print('part 1:', steps)
 
 
 @helpers.timer
 def p2():
     locations = [k for k in moves if k.endswith('A')]
-    instructions = itertools.cycle(data[0])
+    instrs = itertools.cycle(instructions)
     steps = 0
     ends = []
-    while not all(loc.endswith('Z') for loc in locations):
-        inst = next(instructions)
-        to_remove = []
+    while locations:
+        inst = next(instrs)
         steps += 1
-        for i, loc in enumerate(locations):
-            n = get_next(loc, inst)
-            locations[i] = n
+        w = []
+        for where in locations:
+            n = get_next(where, inst)
             if n.endswith('Z'):
-                to_remove.append(n)
                 ends.append(steps)
-        for r in to_remove:
-            locations.remove(r)
+            else:
+                w.append(n)
+        locations = w
     print('part 2:', math.lcm(*ends))
 
 
