@@ -22,15 +22,14 @@ def check(row):
 
 for row, values in data.items():
     value = values[0]
-    zeroes = False
-    while not zeroes:
+    while True:
         next_row = []
         for v1, v2 in itertools.pairwise(value):
             next_row.append(v2 - v1)
-        if check(next_row):
-            zeroes = True
         data[row].append(next_row)
         value = next_row
+        if check(next_row):
+            break
     for i, value in enumerate(reversed(values)):
         if i == 0:
             value.append(0)
