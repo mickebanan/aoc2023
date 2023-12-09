@@ -12,14 +12,6 @@ for i, row in enumerate(data):
     _data[i] = [[int(a) for a in row.split()]]
 data = _data
 
-
-def check(row):
-    for v in row:
-        if v != 0:
-            return False
-    return True
-
-
 for row, values in data.items():
     value = values[0]
     while True:
@@ -28,7 +20,7 @@ for row, values in data.items():
             next_row.append(v2 - v1)
         data[row].append(next_row)
         value = next_row
-        if check(next_row):
+        if sum(next_row) == 0:
             break
     for i, value in enumerate(reversed(values)):
         if i == 0:
