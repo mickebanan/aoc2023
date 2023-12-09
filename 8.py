@@ -45,19 +45,11 @@ for row in data[2:]:
 
 def work(where, instructions):
     steps = 0
+    lr = {'L': 0, 'R': 1}
     while not where.endswith('Z'):
         steps += 1
-        i = next(instructions)
-        where = get_next(where, i)
+        where = moves[where][lr[next(instructions)]]
     return steps
-
-
-def get_next(where, direction):
-    if direction == 'L':
-        where = moves[where][0]
-    else:
-        where = moves[where][1]
-    return where
 
 
 def p1():
@@ -70,19 +62,7 @@ def p1():
 def p2():
     locations = [k for k in moves if k.endswith('A')]
     instrs = itertools.cycle(instructions)
-    steps = 0
-    ends = []
-    while locations:
-        inst = next(instrs)
-        steps += 1
-        w = []
-        for where in locations:
-            n = get_next(where, inst)
-            if n.endswith('Z'):
-                ends.append(steps)
-            else:
-                w.append(n)
-        locations = w
+    ends = [work(loc, instrs) for loc in locations]
     print('part 2:', math.lcm(*ends))
 
 
