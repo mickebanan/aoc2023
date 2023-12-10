@@ -1,5 +1,4 @@
 import math
-import re
 
 data = [
     '.....',
@@ -108,27 +107,27 @@ start = get_start()
 # part 1
 to_visit = {start}
 dist = 0
-b = {}
+loop = set()
 while to_visit:
     n = to_visit.pop()
-    if n not in b:
-        b[n] = dist
+    if n not in loop:
+        loop.add(n)
         dist += 1
         for nn in get_next(*n):
             to_visit.add(nn)
 # The halfway point is half of the total length of the loop, rounded up.
-print('part 1:', math.ceil(max(v for v in b.values()) / 2))
+print('part 1:', int(math.ceil(dist) / 2))
 
 # part 2
 _data = []
 for y, row in enumerate(data):
     # Strip out everything not part of the loop.
-    _data.append(''.join(data[y][x] if (y, x) in b else ' ' for x in range(len(row))))
+    _data.append(''.join(data[y][x] if (y, x) in loop else ' ' for x in range(len(row))))
 data = _data
 
 _data = []
 inside = 0
-# It would be enough to just increment the inside counter, the string replacement stuff is just for visualization.
+# It would be enough to just increment the inside counter, the string handling stuff is just for visualization.
 for y, row in enumerate(data):
     r = ''
     for x, c in enumerate(row):
