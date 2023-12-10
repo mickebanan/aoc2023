@@ -132,7 +132,7 @@ for y, row in enumerate(data):
     r = ''
     for x, c in enumerate(row):
         if c == ' ':
-            if row[x:] == ' ' * (len(row) - x):
+            if row[x:].rstrip() == '':
                 continue  # don't consider whitespace at the end
             cnt = 0
             for xx in range(x):
