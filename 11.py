@@ -46,7 +46,7 @@ for y, row in enumerate(data):
             galaxies.add((y, x))
 
 
-def walk(galaxy, part_1=True):
+def get_distances(galaxy, part_1=True):
     def get_distance(y1, x1, y2, x2):
         ydiff = xdiff = 0
         if part_1:
@@ -66,7 +66,7 @@ def walk(galaxy, part_1=True):
 def p1():
     shortest = 0
     for galaxy in galaxies:
-        d = walk(galaxy)
+        d = get_distances(galaxy)
         shortest += d
     print('part 1:', shortest // 2)
 
@@ -74,7 +74,7 @@ def p1():
 def p2():
     shortest = 0
     for galaxy in galaxies:
-        d = walk(galaxy, part_1=False)
+        d = get_distances(galaxy, part_1=False)
         shortest += d
     print('part 2:', shortest // 2)
 
