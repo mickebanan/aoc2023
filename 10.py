@@ -1,5 +1,3 @@
-import math
-
 data = [
     '.....',
     '.S-7.',
@@ -116,7 +114,7 @@ while to_visit:
         for nn in get_next(*n):
             to_visit.add(nn)
 # The halfway point is half of the total length of the loop, rounded up.
-print('part 1:', int(math.ceil(dist) / 2))
+print('part 1:', dist // 2)
 
 # part 2
 _data = []
