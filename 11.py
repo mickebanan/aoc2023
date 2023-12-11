@@ -39,11 +39,7 @@ empty_ys = expand(data)
 data = transpose(data)
 empty_xs = expand(data)
 data = transpose(data)
-galaxies = set()
-for y, row in enumerate(data):
-    for x, col in enumerate(row):
-        if col == '#':
-            galaxies.add((y, x))
+galaxies = {(y, x) for y, row in enumerate(data) for x, c in enumerate(row) if c == '#'}
 
 
 def get_distances(galaxy, part_1=True):
@@ -63,21 +59,5 @@ def get_distances(galaxy, part_1=True):
     return sum(get_distance(*galaxy, *g2) for g2 in galaxies if g2 != galaxy)
 
 
-def p1():
-    shortest = 0
-    for galaxy in galaxies:
-        d = get_distances(galaxy)
-        shortest += d
-    print('part 1:', shortest // 2)
-
-
-def p2():
-    shortest = 0
-    for galaxy in galaxies:
-        d = get_distances(galaxy, part_1=False)
-        shortest += d
-    print('part 2:', shortest // 2)
-
-
-p1()
-p2()
+print('part 1:', sum(get_distances(g) for g in galaxies) // 2)
+print('part 2:', sum(get_distances(g, part_1=False) for g in galaxies) // 2)
