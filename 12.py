@@ -1,5 +1,8 @@
+import functools
 import itertools
-import re
+import regex as re
+
+import helpers
 
 data = [
     # '???.### 1,1,3',
@@ -7,87 +10,66 @@ data = [
     # '?#?#?#?#?#?#?#? 1,3,1,6',
     # '????.#...#... 4,1,1',
     # '????.######..#####. 1,6,5',
-    # '?###???????? 3,2,1',
+    # '?###???????? 3,2,1',',
+    # '???#.????#?? 1,1,1,1',
 ]
 with open('12.dat') as f:
     data = [row.strip() for row in f.readlines()]
 
 
-def parse2(s, pos, ret, checksum):
-    # print('parsing (%s; %s; %s)' % (s, ret, checksum))
+def parse(s, pos, ret, checksum):
+    # print('parsing (%s; %d; %s; %s)' % (s, pos, ret, checksum))
     if not checksum and '#' not in s:
         # print('returning', ret + s[pos:])
-        yield ret + s[pos:]
-    for ck in checksum[:1]:
-        # print('CHECKING', ck, checksum)
-        for i, c in enumerate(s[pos:]):
-            if c == '.':
-                continue
-            a = s[pos + i:pos + i + ck]
-            # try:
-            #     following = s[pos + i + ck]
-            # except IndexError:
-            #     following = ''
-            # if pos + i > 0:
-            #     preceding = s[pos + i - 1]
-            # else:
-            #     preceding = ''
-            if len(a) < ck:
-                break
-            # print(' current a:', a, len(a))
-            if re.match(r'(?<!#)[#?]{%s}(?!#)' % ck, a):
-                current = pos + i + ck
-                _ret = ret + '.' * i + '#' * ck
-                if current + 1 <= len(s):
-                    _ret += '.'
-                _s = s[:pos + i] + s[pos + i:current].replace('#', 'x') + s[current:]
-                yield from parse2(_s, pos + i + ck + 1, _ret, checksum[1:])
-
-            # funkar men duger inte för p2
-            # for p in itertools.product('?#', repeat=ck):
-            #     p = ''.join(p)
-            #     print(' i: %s, p: %s, following: %s, preceding: %s' % (i, p, following, preceding))
-            #     if (p == a
-            #             and (not following or following != '#')
-            #             and (not preceding or preceding != '#')):
-            #         print(' MATCH!')
-            #         current = pos + i + ck
-            #         _ret = ret + '.' * i + '#' * ck
-            #         if current + 1 <= len(s):
-            #             _ret += '.'
-            #         _s = s[:pos + i] + s[pos + i:current].replace('#', 'x') + s[current:]
-            #         yield from parse2(_s, pos + i + ck + 1, _ret, checksum[1:])
-
+        # yield ret + s[pos:]
+        yield 1
+    elif '#' not in s[:pos] and checksum:
+        ck = checksum[0]
+        # if (sum(checksum) + len(checksum) - 1) > len(s[pos:]):
+        #     # print(' derp')
+        #     yield 0
+        # else:
+        for m in re.finditer(r'(?<!#)[#?]{%s}(?!#)' % ck, s[pos:], overlapped=True):
+            start, stop = m.span()
+            current = pos + stop
+            _ret = ret + '.' * start + '#' * ck
+            if current + 1 <= len(s):
+                _ret += '.'
+            _s = s[:pos + start] + s[pos + start:current].replace('#', 'x') + s[current:]
+            yield from parse(_s, pos + stop + 1, _ret, tuple(checksum)[1:])
+    else:
+        yield 0
 
 s = 0
+import time
 for j, row in enumerate(data):
+    t = time.time()
     value, checksum = row.split()
     _value = ''
     _checksum = ''
     # part 2
-    # for i in range(5):
-    #     _value += value
-    #     _checksum += checksum
-    #     if i < 4:
-    #         _value += '?'
-    #         _checksum += ','
-    # value = _value
-    # checksum = _checksum
-    # print(value, checksum)
+    for i in range(5):
+        _value += value
+        _checksum += checksum
+        if i < 4:
+            _value += '?'
+            _checksum += ','
+    value = _value
+    checksum = _checksum
     checksum = [int(a) for a in checksum.split(',')]
-    res = set()
-    for i, a in enumerate(parse2(value, 0, '', checksum)):
+    ss = 0
+    for a in parse(value, 0, '', tuple(checksum)):
         # print('derp:', i, a)
-        res.add(a)
-    s += len(res)
-    print(j, len(res))
+        # res.add(a)
+        # print(a)
+        ss += a
+    s += ss
+    print(j, ss)
+    # print(s)
     # print('>>', row)
     # print('total:', len(res))
     # for r in sorted(res):
     #     print(r)
+    # print(time.time() - t)
 print(s)
-
-# 12114 too high
-# 9759 too high
-# 9284 too high
 
