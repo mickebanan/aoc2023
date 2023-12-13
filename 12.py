@@ -1,75 +1,55 @@
 import functools
-import itertools
-import regex as re
-
-import helpers
 
 data = [
-    # '???.### 1,1,3',
-    # '.??..??...?##. 1,1,3',
-    # '?#?#?#?#?#?#?#? 1,3,1,6',
-    # '????.#...#... 4,1,1',
-    # '????.######..#####. 1,6,5',
-    # '?###???????? 3,2,1',',
-    # '???#.????#?? 1,1,1,1',
+    '???.### 1,1,3',
+    '.??..??...?##. 1,1,3',
+    '?#?#?#?#?#?#?#? 1,3,1,6',
+    '????.#...#... 4,1,1',
+    '????.######..#####. 1,6,5',
+    '?###???????? 3,2,1',
+    '???#.????#?? 1,1,1,1',
 ]
 with open('12.dat') as f:
     data = [row.strip() for row in f.readlines()]
 
 
-def parse(s, pos, ret, checksum):
-    # print('parsing (%s; %d; %s; %s)' % (s, pos, ret, checksum))
-    if not checksum and '#' not in s:
-        # print('returning', ret + s[pos:])
-        # yield ret + s[pos:]
-        yield 1
-    elif '#' not in s[:pos] and checksum:
-        ck = checksum[0]
-        # if (sum(checksum) + len(checksum) - 1) > len(s[pos:]):
-        #     # print(' derp')
-        #     yield 0
-        # else:
-        for m in re.finditer(r'(?<!#)[#?]{%s}(?!#)' % ck, s[pos:], overlapped=True):
-            start, stop = m.span()
-            current = pos + stop
-            _ret = ret + '.' * start + '#' * ck
-            if current + 1 <= len(s):
-                _ret += '.'
-            _s = s[:pos + start] + s[pos + start:current].replace('#', 'x') + s[current:]
-            yield from parse(_s, pos + stop + 1, _ret, tuple(checksum)[1:])
-    else:
-        yield 0
+@functools.cache
+def parse(s, checksum):
+    if not checksum:
+        return 1 if '#' not in s else 0
+    elif not s:
+        return 0
+    ck = checksum[0]
 
-s = 0
-import time
-for j, row in enumerate(data):
-    t = time.time()
+    def hash():
+        a = s[:ck].replace('?', '#')
+        if a != '#' * ck:
+            return 0
+        if not s[len(a):].startswith('#'):
+            return parse(s[len(a) + 1:], checksum[1:])
+        else:
+            return 0
+
+    def dot():
+        return parse(s[1:], checksum)
+
+    for i, c in enumerate(s):
+        if c == '.':
+            return dot()
+        elif c == '#':
+            return hash()
+        elif c == '?':
+            return hash() + dot()
+
+
+p1 = p2 = 0
+for row in data:
     value, checksum = row.split()
-    _value = ''
-    _checksum = ''
-    # part 2
-    for i in range(5):
-        _value += value
-        _checksum += checksum
-        if i < 4:
-            _value += '?'
-            _checksum += ','
-    value = _value
-    checksum = _checksum
     checksum = [int(a) for a in checksum.split(',')]
-    ss = 0
-    for a in parse(value, 0, '', tuple(checksum)):
-        # print('derp:', i, a)
-        # res.add(a)
-        # print(a)
-        ss += a
-    s += ss
-    print(j, ss)
-    # print(s)
-    # print('>>', row)
-    # print('total:', len(res))
-    # for r in sorted(res):
-    #     print(r)
-    # print(time.time() - t)
-print(s)
+    p1 += parse(value, tuple(checksum))
+    value = '?'.join([value] * 5)
+    checksum = [checksum * 5][0]
+    p2 += parse(value, tuple(checksum))
+print('part 1:', p1)
+print('part 2:', p2)
 
