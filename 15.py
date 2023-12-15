@@ -15,9 +15,7 @@ for value in (d for d in data.split(',')):
         if c in ('-', '='):
             key = v
             op = c
-        v += ord(c)
-        v *= 17
-        v %= 256
+        v = (v + ord(c)) * 17 % 256
     p1 += v
     for sep in ('-', '='):
         if sep in value:
