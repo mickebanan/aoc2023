@@ -17,10 +17,7 @@ for value in (d for d in data.split(',')):
             op = c
         v = (v + ord(c)) * 17 % 256
     p1 += v
-    for sep in ('-', '='):
-        if sep in value:
-            value = value.split(sep)
-            break
+    value = value.split(op)
     for j, (a, b) in enumerate(m[key]):
         if a == value[0]:
             if op == '-':
