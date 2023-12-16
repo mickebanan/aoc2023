@@ -56,6 +56,7 @@ def shine(pos, direction, path, cache):
                 direction = 'w'
                 yield from shine(pos, 'e', path, cache)
             move()
+    cache[(pos, direction)] = path
     yield path
 
 
