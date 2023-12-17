@@ -1,4 +1,4 @@
-import queue
+import heapq
 
 from helpers import timer
 
@@ -71,12 +71,12 @@ def get_next(y, x, direction, dc):
 
 @timer
 def walk(min_walk=0, max_walk=2):
-    pq = queue.PriorityQueue()
-    pq.put((0, start, '>', 0))
-    pq.put((0, start, 'v', 0))
+    hq = []
+    heapq.heappush(hq, (0, start, '>', 0))
+    heapq.heappush(hq, (0, start, 'v', 0))
     visited = set()
-    while pq.qsize():
-        cost, u, d, dc = pq.get()
+    while hq:
+        cost, u, d, dc = heapq.heappop(hq)
         if (u, d, dc) in visited:
             continue
         visited.add((u, d, dc))
@@ -88,7 +88,7 @@ def walk(min_walk=0, max_walk=2):
                 continue
             if dc < min_walk and next_d != d:
                 continue
-            pq.put((cost + get_value(yy, xx), (yy, xx), next_d, next_dc))
+            heapq.heappush(hq, (cost + get_value(yy, xx), (yy, xx), next_d, next_dc))
     return -1
 
 
