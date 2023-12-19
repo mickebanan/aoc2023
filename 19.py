@@ -1,6 +1,7 @@
 import collections
 import math
 import operator
+import re
 from functools import reduce
 
 data = """px{a<2006:qkq,m>2090:A,rfg}
@@ -39,13 +40,12 @@ def get_part_values(part):
 for row in data.split('\n'):
     if not row:
         read_parts = True
+        continue
+    if read_parts:
+        parts.append(get_part_values(row.strip('{}').split(',')))
     else:
-        if read_parts:
-            parts.append(get_part_values(row.lstrip('{').rstrip('}').split(',')))
-        else:
-            i, rules = row.split('{')
-            rules = rules.rstrip('}')
-            instructions[i] = rules.split(',')
+        i, rules = row.split('{')
+        instructions[i] = rules.rstrip('}').split(',')
 
 
 def parse_rule(rule):
