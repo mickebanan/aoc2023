@@ -109,4 +109,4 @@ while work:
                     values[k] = range(start, mid)
             elif instr != 'R':
                 work.append((instr, values))
-print('part 2', p2)
+print('part 2:', p2)
