@@ -56,8 +56,8 @@ def collapse(bricks):
     settled_bricks = []
     while brick := next(falling_bricks, False):
         b = drop(brick, settled_bricks)
-        settled_bricks.insert(0, b)
-    return list(reversed(settled_bricks))
+        settled_bricks.append(b)
+    return settled_bricks
 
 
 bricks = collapse(bricks)
