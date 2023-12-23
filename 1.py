@@ -16,7 +16,7 @@ data = [  # part 2 test
     'zoneight234',
     '7pqrstsixteen',
 ]
-with open('1.dat') as f:
+with open('input/1.dat') as f:
     data = [line.strip() for line in f.readlines()]
 
 numbers = {

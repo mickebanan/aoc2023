@@ -14,7 +14,7 @@ broadcaster -> a
 %b -> con
 &con -> output
 """
-data = open('20.dat').read().strip()
+data = open('input/20.dat').read().strip()
 flipflops = {}
 conjunctions = {}
 targets = {}

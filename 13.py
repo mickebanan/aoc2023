@@ -41,7 +41,7 @@ def check(pattern, fixes=0):
 
 pattern = []
 p1 = p2 = 0
-data = open('13.dat').read()
+data = open('input/13.dat').read()
 for row in data.split('\n'):
     if row:
         pattern.append(row)

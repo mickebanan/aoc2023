@@ -22,7 +22,7 @@ hdj{m>838:A,pv}
 {x=2461,m=1339,a=466,s=291}
 {x=2127,m=1623,a=2188,s=1013}
 """
-data = open('19.dat').read().strip()
+data = open('input/19.dat').read().strip()
 instructions = collections.defaultdict(list)
 parts = []
 read_parts = False

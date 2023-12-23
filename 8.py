@@ -34,7 +34,7 @@ data = [
     '22Z = (22B, 22B)',
     'XXX = (XXX, XXX)',
 ]
-with open('8.dat') as f:
+with open('input/8.dat') as f:
     data = [row.strip() for row in f.readlines()]
 instructions = data[0]
 moves = {}

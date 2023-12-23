@@ -14,7 +14,7 @@ O.#..O.#.#
 #....###..
 #OO..#....
 """
-data = open('14.dat').read()
+data = open('input/14.dat').read()
 d = []
 for row in data.split('\n'):
     if not row:

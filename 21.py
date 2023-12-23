@@ -13,7 +13,7 @@ data = """
 """
 rocks = set()
 start = None
-data = open('21.dat').read()
+data = open('input/21.dat').read()
 data = data.strip().split('\n')
 ymax = len(data)
 xmax = len(data[0])

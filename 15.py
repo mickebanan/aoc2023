@@ -3,7 +3,7 @@ import operator
 from functools import reduce
 
 data = """rn=1,cm-,qp=3,cm=2,qp-,pc=4,ot=9,ab=5,pc-,pc=6,ot=7"""
-data = open('15.dat').read()
+data = open('input/15.dat').read()
 
 p1 = p2 = 0
 m = collections.defaultdict(list)

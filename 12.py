@@ -9,7 +9,7 @@ data = [
     '?###???????? 3,2,1',
     '???#.????#?? 1,1,1,1',
 ]
-with open('12.dat') as f:
+with open('input/12.dat') as f:
     data = [row.strip() for row in f.readlines()]
 
 

@@ -28,7 +28,7 @@ data = [
     '60 56 37',
     '56 93 4',
 ]
-with open('5.dat') as f:
+with open('input/5.dat') as f:
     data = [row.strip() for row in f.readlines()]
 
 seeds = []

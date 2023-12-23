@@ -28,7 +28,7 @@ data = """
 #.....###...###...#...#
 #####################.#
 """
-data = open('23.dat').read()
+data = open('input/23.dat').read()
 data = list(data.strip().splitlines())
 start = (0, 1)
 end = (len(data) - 1, data[-1].find('.'))

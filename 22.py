@@ -9,7 +9,7 @@ data = """
 0,1,6~2,1,6
 1,1,8~1,1,9
 """
-data = open('22.dat').read()
+data = open('input/22.dat').read()
 bricks = []
 bricks_below = defaultdict(set)
 bricks_above = defaultdict(set)
