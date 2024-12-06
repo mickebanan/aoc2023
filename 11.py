@@ -1,3 +1,5 @@
+import helpers
+
 data = [
     '...#......',
     '.......#..',
@@ -14,16 +16,6 @@ with open('11.dat') as f:
     data = [row.strip() for row in f.readlines()]
 
 
-def transpose(m):
-    _m = []
-    for i in range(len(m[0])):
-        r = []
-        for row in m:
-            r.append(row[i])
-        _m.append(''.join(r))
-    return _m
-
-
 def expand(data):
     empty = set()
     for y, row in enumerate(data):
@@ -34,9 +26,9 @@ def expand(data):
 
 # expand
 empty_ys = expand(data)
-data = transpose(data)
+data = helpers.transpose(data)
 empty_xs = expand(data)
-data = transpose(data)
+data = helpers.transpose(data)
 galaxies = {(y, x) for y, row in enumerate(data) for x, c in enumerate(row) if c == '#'}
 
 
