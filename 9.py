@@ -5,7 +5,7 @@ data = [
     '1 3 6 10 15 21',
     '10 13 16 21 30 45',
 ]
-with open('9.dat') as f:
+with open('input/9.dat') as f:
     data = [row.strip() for row in f.readlines()]
 _data = {}
 for i, row in enumerate(data):

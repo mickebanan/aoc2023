@@ -9,7 +9,7 @@ data = [
     'KTJJT 220',
     'QQQJA 483',
 ]
-with open('7.dat') as f:
+with open('input/7.dat') as f:
     data = [row.strip() for row in f.readlines()]
 
 

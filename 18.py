@@ -17,7 +17,7 @@ U 2 (#7a21e3)
 p1 = []
 p2 = []
 dirs = {'0': 'R', '1': 'D', '2': 'L', '3': 'U'}
-data = open('18.dat').read()
+data = open('input/18.dat').read()
 for row in data.strip().split('\n'):
     d, s, h = row.split()
     p1.append((d, int(s)))

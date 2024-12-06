@@ -13,7 +13,7 @@ data = [
     '...$.*....',
     '.664.598..',
 ]
-with open('3.dat') as f:
+with open('input/3.dat') as f:
     data = [row.strip() for row in f.readlines()]
 
 max_y = len(data) - 1

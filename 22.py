@@ -1,5 +1,4 @@
-import time
-import pprint
+from collections import defaultdict
 
 data = """
 1,0,1~1,2,1
@@ -10,17 +9,15 @@ data = """
 0,1,6~2,1,6
 1,1,8~1,1,9
 """
-data = open('22.dat').read()
+data = open('input/22.dat').read()
 bricks = []
+bricks_below = defaultdict(set)
+bricks_above = defaultdict(set)
 
 
 def sorted_input(v):
     a, _ = v.split('~')
     return int(a.split(',')[-1])
-
-
-def sorted_list(v):
-    return min(z for x, y, z in v)
 
 
 for row in sorted(data.strip().split('\n'), key=sorted_input):
@@ -35,72 +32,52 @@ for row in sorted(data.strip().split('\n'), key=sorted_input):
             for x in xrange:
                 brick.add((x, y, z))
     bricks.append(brick)
-# print(bricks)
-
-
-def p(b):
-    pprint.pprint(sorted(b, key=sorted_list))
 
 
 def collapse(bricks):
-    def check(brick, prev_bricks):
-        # print('checking:', brick)
-        while True:
-            # time.sleep(0.1)
+    def drop(brick, prev_bricks):
+        falling = True
+        while falling:
             if min(z for (x, y, z) in brick) == 1:
-                # print(' at bottom')
                 return brick
             candidate = {(x, y, z - 1) for x, y, z in brick}
-            # print('candidate:', candidate)
-            for prev_brick in prev_bricks:
-                # print('comparing:', prev_brick, prev_brick & candidate)
-                if prev_brick & candidate:
-                    # print('cannot fit, returning', brick)
-                    return brick
-                # else:
-                #     print('fits')
-            else:
-                # print('new candidate:', candidate)
+            for p in prev_bricks:
+                if set(p) & candidate:
+                    falling = False
+                    bricks_below[tuple(brick)].add(tuple(p))
+            if falling:
                 brick = candidate
+        brick = tuple(brick)
+        for below in bricks_below[brick]:
+            bricks_above[below].add(brick)
+        return brick
 
     falling_bricks = iter(bricks)
     settled_bricks = []
     while brick := next(falling_bricks, False):
-        b = check(brick, settled_bricks)
-        settled_bricks.insert(0, b)
-    return list(reversed(settled_bricks))
+        b = drop(brick, settled_bricks)
+        settled_bricks.append(b)
+    return settled_bricks
 
 
 bricks = collapse(bricks)
-p(bricks)
-print('amount of bricks:', len(bricks))
-
-
-def compare(b1, b2):
-    return {tuple(e) for e in b1} - {tuple(e) for e in b2}
-
-
 p1 = p2 = 0
 for brick in bricks:
-    print('removing', brick)
-    new_bricks = bricks[:]
-    new_bricks.remove(brick)
-    # print('investigating')
-    # p(new_bricks)
-    bb = collapse(new_bricks)
-    # print('--')
-    # p(bb)
-    if v := compare(bb, new_bricks):
-        print(len(v), 'bricks would fall')
-        p(v)
-        p2 += len(v)
+    brick = tuple(brick)
+    if b := bricks_above[brick]:
+        if all((len(bricks_below.get(a)) > 1 for a in b)):
+            p1 += 1
     else:
-        # print('unchanged, can remove')
         p1 += 1
+    q = [brick]
+    falling_bricks = {brick}
+    while q:
+        b = q.pop(0)
+        for ba in bricks_above.get(b, {}):
+            if not bricks_below.get(ba) - falling_bricks:
+                falling_bricks.add(ba)
+                q.append(ba)
+    p2 += len(falling_bricks - {brick})
+
 print('part 1:', p1)
 print('part 2:', p2)
-
-
-# 56911 too low
-# 57728 too low
-# 58545?

@@ -25,7 +25,7 @@ data = """
 999999999991
 """
 data = [d for d in data.strip().splitlines()]
-data = [d for d in open('17.dat').read().splitlines()]
+data = [d for d in open('input/17.dat').read().splitlines()]
 ymax = len(data) - 1
 xmax = len(data[0]) - 1
 start = (0, 0)

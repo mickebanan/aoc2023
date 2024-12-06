@@ -14,7 +14,7 @@ data = r"""
 .|....-|.\
 ..//.|....
 """.strip().split('\n')
-data = open('16.dat').read().strip().split('\n')
+data = open('input/16.dat').read().strip().split('\n')
 ymax = len(data)
 xmax = len(data[0])
 mirrors = {

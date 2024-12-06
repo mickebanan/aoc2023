@@ -54,7 +54,7 @@ data = [
 #     'L.L7LFJ|||||FJL7||LJ',
 #     'L7JLJL-JLJLJL--JLJ.L',
 # ]
-with open('10.dat') as f:
+with open('input/10.dat') as f:
     data = [row.strip() for row in f.readlines()]
 h_right = '-7J'
 h_left = '-LF'
